@@ -48,7 +48,7 @@ const linksTypeAgenda = ref([
     title: 'fullcalendar Année',
     caption: 'fullcalendaryear',
     icon: 'calendar_view_month',
-    link: '/fullcalendaryear',
+    link: '/year',
   },
   {
     title: 'fullcalendar 7+ Timeline',
