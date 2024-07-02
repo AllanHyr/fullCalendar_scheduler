@@ -31,12 +31,6 @@ async function fetchEvents() {
   } catch (error) {
     console.error('Error fetching events:', error);
   }
-  try {
-    const response = await api.get('/events');
-    calendarOptions.value.events = response.data; // assume response.data is the events array
-  } catch (error) {
-    console.error('Error fetching events:', error);
-  }
 }
 
 onMounted(() => {

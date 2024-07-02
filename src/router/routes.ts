@@ -7,7 +7,15 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/planning/dayVerticalRessource.vue'),
+        component: () => import('src/pages/planning/dayView.vue'),
+      },
+      {
+        path: 'week',
+        component: () => import('src/pages/planning/weekView.vue'),
+      },
+      {
+        path: 'mouth',
+        component: () => import('src/pages/planning/mouthView.vue'),
       },
     ],
   },

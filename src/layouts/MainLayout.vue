@@ -3,41 +3,18 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
+          v-for="link in linksTypeAgenda"
           :key="link.title"
           v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+          @click="$router.push(link.link)"
+          class="q-pa-sm"
+        >
+          <q-tooltip>
+            {{ link.title }}
+          </q-tooltip>
+        </q-btn>
+      </q-toolbar>
+    </q-header>
 
     <q-page-container>
       <router-view />
@@ -47,56 +24,49 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
 
-const essentialLinks: EssentialLinkProps[] = [
+const linksTypeAgenda = ref([
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'fullcalendar Journalier',
+    caption: 'fullcalendar',
+    icon: 'date_range',
+    link: '/',
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: 'fullcalendar Semaine',
+    caption: 'fullcalendarweek',
+    icon: 'calendar_view_week',
+    link: '/week',
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    title: 'fullcalendar Mois',
+    caption: 'fullcalendarmonth',
+    icon: 'calendar_month',
+    link: '/mouth',
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    title: 'fullcalendar Année',
+    caption: 'fullcalendaryear',
+    icon: 'calendar_view_month',
+    link: '/fullcalendaryear',
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
+    title: 'fullcalendar 7+ Timeline',
+    caption: 'fullcalendarresource',
+    icon: 'calendar_view_day',
+    link: '/fullcalendarresource',
   },
   {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
+    title: 'Planning 7+ synthétique',
+    caption: 'resource Tranche Horaire',
+    icon: 'date_range',
+    link: '/resourceTrancheHoraire',
   },
   {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+    title: 'Planning 31+',
+    caption: 'Planning mois ligne',
+    icon: 'date_range',
+    link: '/planningMoisLine',
+  },
+]);
 </script>
