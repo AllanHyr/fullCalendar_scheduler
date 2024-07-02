@@ -1,0 +1,49 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import { api } from 'boot/axios';
+import FullCalendar from '@fullcalendar/vue3';
+import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
+import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+
+const calendarOptions = ref({
+  plugins: [resourceTimeGridPlugin, resourceDayGridPlugin, interactionPlugin],
+  initialView: 'resourceTimeGridDay',
+  dateClick: handleDateClick,
+  events: [],
+  resources: [
+    { id: '1', building: '460 Bryant', title: 'Auditorium A' },
+    { id: '2', building: '460 Bryant', title: 'Auditorium B' },
+    { id: '3', building: '460 Bryant', title: 'Auditorium C' },
+    { id: '4', building: '460 Bryant', title: 'Auditorium D' },
+    { id: '5', building: '460 Bryant', title: 'Auditorium E' },
+  ],
+});
+
+function handleDateClick(arg) {
+  alert('date click! ' + arg.dateStr);
+}
+
+async function fetchEvents() {
+  try {
+    const response = await api.get('/events');
+    calendarOptions.value.events = response.data; // assume response.data is the events array
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
+  try {
+    const response = await api.get('/events');
+    calendarOptions.value.events = response.data; // assume response.data is the events array
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
+}
+
+onMounted(() => {
+  fetchEvents();
+});
+</script>
+
+<template>
+  <FullCalendar :options="calendarOptions" />
+</template>
