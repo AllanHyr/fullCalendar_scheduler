@@ -6,3 +6,10 @@ export interface Todo {
 export interface Meta {
   totalCount: number;
 }
+
+export interface Link {
+  title: string;
+  caption: string;
+  icon: string;
+  link: string;
+}

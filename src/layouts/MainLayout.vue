@@ -23,9 +23,10 @@
 </template>
 
 <script setup lang="ts">
+import { Link } from 'components/models';
 import { ref } from 'vue';
 
-const linksTypeAgenda = ref([
+const linksTypeAgenda = ref<Link[]>([
   {
     title: 'fullcalendar Journalier',
     caption: 'fullcalendar',
@@ -56,17 +57,17 @@ const linksTypeAgenda = ref([
     icon: 'calendar_view_day',
     link: '/weekTimeline',
   },
-  {
-    title: 'Planning 7+ synthétique',
-    caption: 'resource Tranche Horaire',
-    icon: 'date_range',
-    link: '/resourceTrancheHoraire',
-  },
-  {
-    title: 'Planning 31+',
-    caption: 'Planning mois ligne',
-    icon: 'date_range',
-    link: '/planningMoisLine',
-  },
+  // {
+  //   title: 'Planning 7+ synthétique',
+  //   caption: 'resource Tranche Horaire',
+  //   icon: 'date_range',
+  //   link: '/resourceTrancheHoraire',
+  // },
+  // {
+  //   title: 'Planning 31+',
+  //   caption: 'Planning mois ligne',
+  //   icon: 'date_range',
+  //   link: '/planningMoisLine',
+  // },
 ]);
 </script>

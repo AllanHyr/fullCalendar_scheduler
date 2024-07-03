@@ -10,6 +10,7 @@ const calendarOptions = ref({
   plugins: [resourceTimeGridPlugin, resourceDayGridPlugin, interactionPlugin],
   initialView: 'resourceTimeGridDay',
   dateClick: handleDateClick,
+  locale: 'fr',
   events: [],
   resources: [
     { id: '1', building: '460 Bryant', title: 'Auditorium A' },
@@ -27,7 +28,7 @@ function handleDateClick(arg) {
 async function fetchEvents() {
   try {
     const response = await api.get('/events');
-    calendarOptions.value.events = response.data; // assume response.data is the events array
+    calendarOptions.value.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }

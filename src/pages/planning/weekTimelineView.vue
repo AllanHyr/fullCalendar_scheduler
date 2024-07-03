@@ -8,6 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 const calendarOptions = ref({
   plugins: [resourceTimelinePlugin, interactionPlugin],
   initialView: 'resourceTimeline',
+  locale: 'fr',
   dateClick: handleDateClick,
   events: function (fetchInfo, successCallback, failureCallback) {
     loadEventsForWeek(fetchInfo.start, successCallback, failureCallback);

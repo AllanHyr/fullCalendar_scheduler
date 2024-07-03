@@ -9,6 +9,7 @@ const calendarOptions = ref({
   plugins: [multiMonthPlugin, interactionPlugin],
   initialView: 'multiMonthYear',
   dateClick: handleDateClick,
+  locale: 'fr',
   events: [],
 });
 
@@ -19,7 +20,7 @@ function handleDateClick(arg) {
 async function fetchEvents() {
   try {
     const response = await api.get('/events');
-    calendarOptions.value.events = response.data; // assume response.data is the events array
+    calendarOptions.value.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }

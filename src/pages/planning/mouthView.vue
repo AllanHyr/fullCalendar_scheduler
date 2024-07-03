@@ -8,6 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
+  locale: 'fr',
   dateClick: handleDateClick,
   events: [],
 });
@@ -19,7 +20,7 @@ function handleDateClick(arg) {
 async function fetchEvents() {
   try {
     const response = await api.get('/events');
-    calendarOptions.value.events = response.data; // assume response.data is the events array
+    calendarOptions.value.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }
