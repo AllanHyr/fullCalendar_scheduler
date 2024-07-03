@@ -54,7 +54,7 @@ const linksTypeAgenda = ref([
     title: 'fullcalendar 7+ Timeline',
     caption: 'fullcalendarresource',
     icon: 'calendar_view_day',
-    link: '/fullcalendarresource',
+    link: '/weekTimeline',
   },
   {
     title: 'Planning 7+ synthétique',
