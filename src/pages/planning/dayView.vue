@@ -1,15 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
 
 const calendarOptions = ref({
-  plugins: [resourceTimeGridPlugin, resourceDayGridPlugin, interactionPlugin],
+  plugins: [resourceTimeGridPlugin, resourceDayGridPlugin],
   initialView: 'resourceTimeGridDay',
-  dateClick: handleDateClick,
   locale: 'fr',
   events: [],
   resources: [
@@ -20,10 +18,6 @@ const calendarOptions = ref({
     { id: '5', building: '460 Bryant', title: 'Auditorium E' },
   ],
 });
-
-function handleDateClick(arg) {
-  alert('date click! ' + arg.dateStr);
-}
 
 async function fetchEvents() {
   try {

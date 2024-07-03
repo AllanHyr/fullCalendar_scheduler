@@ -1,21 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
 
 const calendarOptions = ref({
-  plugins: [dayGridPlugin, interactionPlugin],
+  plugins: [dayGridPlugin],
   initialView: 'dayGridMonth',
   locale: 'fr',
-  dateClick: handleDateClick,
   events: [],
 });
-
-function handleDateClick(arg) {
-  alert('date click! ' + arg.dateStr);
-}
 
 async function fetchEvents() {
   try {

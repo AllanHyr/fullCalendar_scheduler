@@ -1,25 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
-import interactionPlugin from '@fullcalendar/interaction';
 
 const calendarOptions = ref({
-  plugins: [resourceTimelinePlugin, interactionPlugin],
+  plugins: [resourceTimelinePlugin],
   initialView: 'resourceTimeline',
   locale: 'fr',
-  dateClick: handleDateClick,
-  events: function (fetchInfo, successCallback, failureCallback) {
-    loadEventsForWeek(fetchInfo.start, successCallback, failureCallback);
+  events: function (fetchInfo) {
+    loadEventsForWeek(fetchInfo.start);
   },
   resourceGroupField: 'building',
   resources: [],
 });
-
-function handleDateClick(arg) {
-  alert('date click! ' + arg.dateStr);
-}
 
 async function fetchResources() {
   try {
