@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
 
-const calendarOptions = ref({
+const calendarOptions = reactive({
   plugins: [resourceTimeGridPlugin, resourceDayGridPlugin],
   initialView: 'resourceTimeGridDay',
   locale: 'fr',
@@ -22,7 +22,7 @@ const calendarOptions = ref({
 async function fetchEvents() {
   try {
     const response = await api.get('/events');
-    calendarOptions.value.events = response.data;
+    calendarOptions.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }

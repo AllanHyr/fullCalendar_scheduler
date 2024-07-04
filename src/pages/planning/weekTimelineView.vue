@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 
-const calendarOptions = ref({
+const calendarOptions = reactive({
   plugins: [resourceTimelinePlugin],
   initialView: 'resourceTimeline',
   locale: 'fr',
@@ -18,7 +18,7 @@ const calendarOptions = ref({
 async function fetchResources() {
   try {
     const response = await api.get('/ressources');
-    calendarOptions.value.resources = response.data;
+    calendarOptions.resources = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }
@@ -36,7 +36,7 @@ async function loadEventsForWeek(startDate) {
     const response = await api.get(
       `/eventsWeek?start=${startStr}&end=${endStr}`
     );
-    calendarOptions.value.events = response.data;
+    calendarOptions.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }

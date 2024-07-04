@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 
-const calendarOptions = ref({
+const calendarOptions = reactive({
   plugins: [dayGridPlugin],
   initialView: 'dayGridMonth',
   locale: 'fr',
@@ -14,7 +14,7 @@ const calendarOptions = ref({
 async function fetchEvents() {
   try {
     const response = await api.get('/events');
-    calendarOptions.value.events = response.data;
+    calendarOptions.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }

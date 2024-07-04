@@ -14,6 +14,15 @@
           </q-tooltip>
         </q-btn>
       </q-toolbar>
+      <q-toolbar class="col-3 bg-primary text-white">
+        <SelectRooms
+          ref="selectResourceMenu"
+          v-model="resource"
+          :selectResource="selectResource"
+          :optionAll="route.fullPath === '/fullcalendar'"
+          :dense="true"
+        />
+      </q-toolbar>
     </q-header>
 
     <q-page-container>
@@ -25,6 +34,7 @@
 <script setup lang="ts">
 import { Link } from 'components/models';
 import { ref } from 'vue';
+import SelectRooms from 'components/selectRooms.vue';
 
 const linksTypeAgenda = ref<Link[]>([
   {
