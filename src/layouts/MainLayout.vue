@@ -14,15 +14,6 @@
           </q-tooltip>
         </q-btn>
       </q-toolbar>
-      <q-toolbar class="col-3 bg-primary text-white">
-        <SelectRooms
-          ref="selectResourceMenu"
-          v-model="resource"
-          :selectResource="selectResource"
-          :optionAll="route.fullPath === '/fullcalendar'"
-          :dense="true"
-        />
-      </q-toolbar>
     </q-header>
 
     <q-page-container>
@@ -32,9 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import { Link } from 'components/models';
 import { ref } from 'vue';
-import SelectRooms from 'components/selectRooms.vue';
+import { Link } from 'components/models';
 
 const linksTypeAgenda = ref<Link[]>([
   {
@@ -53,7 +43,7 @@ const linksTypeAgenda = ref<Link[]>([
     title: 'fullcalendar Mois',
     caption: 'fullcalendarmonth',
     icon: 'calendar_month',
-    link: '/mouth',
+    link: '/month',
   },
   {
     title: 'fullcalendar Année',
@@ -67,17 +57,5 @@ const linksTypeAgenda = ref<Link[]>([
     icon: 'calendar_view_day',
     link: '/weekTimeline',
   },
-  // {
-  //   title: 'Planning 7+ synthétique',
-  //   caption: 'resource Tranche Horaire',
-  //   icon: 'date_range',
-  //   link: '/resourceTrancheHoraire',
-  // },
-  // {
-  //   title: 'Planning 31+',
-  //   caption: 'Planning mois ligne',
-  //   icon: 'date_range',
-  //   link: '/planningMoisLine',
-  // },
 ]);
 </script>
