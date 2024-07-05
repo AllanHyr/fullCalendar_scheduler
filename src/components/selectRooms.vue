@@ -1,8 +1,34 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useSallePieceStore } from 'stores/sallePiece-store';
+
+const sallePieceStore = useSallePieceStore();
+
+function optionsRessourcesOption() {
+  let options = [];
+  if (sallePieceStore.salles.length === 0) {
+    return [];
+  }
+  sallePieceStore.salles.forEach((salle) => {
+    options.push({
+      label: salle.title,
+      disable: true,
+      id: salle.id,
+    });
+    sallePieceStore.pieces.forEach((resource) => {
+      if (resource.groupId == salle.id)
+        options.push({
+          label: resource.title,
+          value: resource.id,
+          fksalle: resource.groupId,
+        });
+    });
+  });
+  return options;
+}
+</script>
 
 <template>
   <q-select
-    v-if="this.$props.selectResource"
     use-input
     input-debounce="500"
     v-model="resource"
@@ -13,7 +39,6 @@
     @filter="filterFnResource"
     @update:model-value="changeValue()"
     emit-value
-    :dense="$props.dense"
     options-dense
     map-options
   >

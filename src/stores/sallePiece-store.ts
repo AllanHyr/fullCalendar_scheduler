@@ -1,15 +1,22 @@
 import { defineStore } from 'pinia';
+import { Salles, Pieces } from 'src/components/models';
 
-export const useSallePieceStore = defineStore('sallePiece', {
-  state: () => ({
-    counter: 0,
+interface SallePieceState {
+  salles: Salles[];
+  pieces: Pieces[];
+}
+
+export const useSallePieceStore = defineStore<'sallePiece', SallePieceState>({
+  id: 'sallePiece',
+  state: (): SallePieceState => ({
+    salles: [],
+    pieces: [],
   }),
-  getters: {
-    doubleCount: (state) => state.counter * 2,
-  },
+  getters: {},
   actions: {
-    increment() {
-      this.counter++;
+    setResources(salles: Salles[], pieces: Pieces[]) {
+      this.salles = salles;
+      this.pieces = pieces;
     },
   },
 });

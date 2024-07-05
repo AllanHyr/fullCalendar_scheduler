@@ -13,3 +13,14 @@ export interface Link {
   icon: string;
   link: string;
 }
+
+export interface Salles {
+  id: number;
+  title: string;
+}
+
+export interface Pieces {
+  id: number;
+  title: string;
+  groupId: number;
+}

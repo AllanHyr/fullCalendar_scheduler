@@ -14,6 +14,13 @@
           </q-tooltip>
         </q-btn>
       </q-toolbar>
+      <q-toolbar class="col-3 bg-primary text-white">
+        <SelectRooms
+          ref="selectResourceMenu"
+          v-model="resource"
+          :dense="true"
+        />
+      </q-toolbar>
     </q-header>
 
     <q-page-container>
@@ -23,8 +30,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Link } from 'components/models';
+import { api } from 'boot/axios';
+import { useSallePieceStore } from 'stores/sallePiece-store';
+import { Salles, Pieces } from 'src/components/models';
+
+const sallePieceStore = useSallePieceStore();
+
+async function getRessource() {
+  await api.get('/pieceSalle').then((response) => {
+    let data = response.data;
+    let pieces = data.pieces.map(function (e: Pieces) {
+      return {
+        id: e.id,
+        title: e.title,
+        groupId: e.groupId,
+      };
+    });
+    let salles = data.salles.map(function (e: Salles) {
+      return {
+        id: e.id,
+        title: e.title,
+      };
+    });
+    sallePieceStore.setResources(salles, pieces);
+  });
+}
 
 const linksTypeAgenda = ref<Link[]>([
   {
@@ -58,4 +90,8 @@ const linksTypeAgenda = ref<Link[]>([
     link: '/weekTimeline',
   },
 ]);
+
+onMounted(() => {
+  getRessource();
+});
 </script>
