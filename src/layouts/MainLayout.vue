@@ -35,8 +35,10 @@ import { Link } from 'components/models';
 import { api } from 'boot/axios';
 import { useSallePieceStore } from 'stores/sallePiece-store';
 import { Salles, Pieces } from 'src/components/models';
+import { useRoute } from 'vue-router';
 
 const sallePieceStore = useSallePieceStore();
+const route = useRoute();
 
 async function getRessource() {
   await api.get('/pieceSalle').then((response) => {
@@ -90,6 +92,44 @@ const linksTypeAgenda = ref<Link[]>([
     link: '/weekTimeline',
   },
 ]);
+
+function resource(val) {
+  switch (selectResource) {
+    case 'piece':
+      sallePieceStore.setPiece(resource);
+      break;
+    case 'salle':
+      sallePieceStore.setSalle(resource);
+      break;
+  }
+}
+
+function isCalendar() {
+  switch (route.fullPath) {
+    case '/':
+    case '/week':
+    case '/month':
+    case '/year':
+    case '/weekTimeline':
+      return true;
+    default:
+      return false;
+  }
+}
+
+function selectResource() {
+  if (!isCalendar) return false;
+  switch (route.fullPath) {
+    default:
+      return 'piece';
+    case '/planningMoisLine':
+    case '/fullcalendar':
+      return 'salle';
+    case '/resourceTrancheHoraire':
+    case '/fullcalendarresource':
+      return false; // don't need selector piece
+  }
+}
 
 onMounted(() => {
   getRessource();
