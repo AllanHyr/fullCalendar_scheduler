@@ -24,3 +24,11 @@ export interface Pieces {
   title: string;
   groupId: number;
 }
+
+export interface Option {
+  label: string;
+  id?: number;
+  disable?: boolean;
+  value?: number;
+  fksalle?: number;
+}

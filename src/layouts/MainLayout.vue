@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Link } from 'components/models';
 import { api } from 'boot/axios';
 import { useSallePieceStore } from 'stores/sallePiece-store';
@@ -39,6 +39,7 @@ import { useRoute } from 'vue-router';
 
 const sallePieceStore = useSallePieceStore();
 const route = useRoute();
+const resource = ref('');
 
 async function getRessource() {
   await api.get('/pieceSalle').then((response) => {
@@ -93,7 +94,7 @@ const linksTypeAgenda = ref<Link[]>([
   },
 ]);
 
-function resource(val) {
+watch(resource, () => {
   switch (selectResource) {
     case 'piece':
       sallePieceStore.setPiece(resource);
@@ -102,7 +103,7 @@ function resource(val) {
       sallePieceStore.setSalle(resource);
       break;
   }
-}
+});
 
 function isCalendar() {
   switch (route.fullPath) {

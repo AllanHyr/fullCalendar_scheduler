@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useSallePieceStore } from 'stores/sallePiece-store';
+import { Option } from 'src/components/models';
 
 const sallePieceStore = useSallePieceStore();
 
 function optionsRessourcesOption() {
-  let options = [];
+  let options: Option[];
   if (sallePieceStore.salles.length === 0) {
     return [];
   }
