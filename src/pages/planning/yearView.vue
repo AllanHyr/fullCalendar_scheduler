@@ -8,21 +8,24 @@ const calendarOptions = reactive({
   plugins: [multiMonthPlugin],
   initialView: 'multiMonthYear',
   locale: 'fr',
+  datesSet: handleDatesSet,
   events: [],
 });
 
-async function fetchEvents() {
+async function fetchEvents(start: string, end: string) {
   try {
-    const response = await api.get('/events');
+    const response = await api.get('/events', {
+      params: { start, end },
+    });
     calendarOptions.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }
 }
 
-onMounted(() => {
-  fetchEvents();
-});
+function handleDatesSet(info: { startStr: string; endStr: string }) {
+  fetchEvents(info.startStr, info.endStr);
+}
 </script>
 
 <template>

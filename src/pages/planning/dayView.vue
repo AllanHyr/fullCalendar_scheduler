@@ -10,6 +10,7 @@ const calendarOptions = reactive({
   initialView: 'resourceTimeGridDay',
   locale: 'fr',
   events: [],
+  datesSet: handleDatesSet,
   resources: [
     { id: '1', building: '460 Bryant', title: 'Auditorium A' },
     { id: '2', building: '460 Bryant', title: 'Auditorium B' },
@@ -19,18 +20,20 @@ const calendarOptions = reactive({
   ],
 });
 
-async function fetchEvents() {
+async function fetchEvents(start: string, end: string) {
   try {
-    const response = await api.get('/events');
+    const response = await api.get('/events', {
+      params: { start, end },
+    });
     calendarOptions.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }
 }
 
-onMounted(() => {
-  fetchEvents();
-});
+function handleDatesSet(info: { startStr: string; endStr: string }) {
+  fetchEvents(info.startStr, info.endStr);
+}
 </script>
 
 <template>
