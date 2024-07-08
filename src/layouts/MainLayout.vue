@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
-import { Link, Option } from 'components/models';
+import { Link } from 'components/models';
 import { api } from 'boot/axios';
 import { useSallePieceStore } from 'stores/sallePiece-store';
 import { Salles, Pieces } from 'src/components/models';

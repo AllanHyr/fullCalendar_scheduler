@@ -7,10 +7,9 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 const calendarOptions = reactive({
   plugins: [resourceTimelinePlugin],
   initialView: 'resourceTimeline',
+  datesSet: handleDatesSet,
   locale: 'fr',
-  events: function (fetchInfo) {
-    loadEventsForWeek(fetchInfo.start);
-  },
+  events: [],
   resourceGroupField: 'building',
   resources: [],
 });
@@ -24,7 +23,7 @@ async function fetchResources() {
   }
 }
 
-async function loadEventsForWeek(startDate) {
+async function fetchEventsWeek(startDate: string) {
   var start = new Date(startDate);
   var end = new Date(start);
   end.setDate(end.getDate() + 7);
@@ -33,13 +32,17 @@ async function loadEventsForWeek(startDate) {
   var endStr = end.toISOString();
 
   try {
-    const response = await api.get(
-      `/eventsWeek?start=${startStr}&end=${endStr}`
-    );
+    const response = await api.get('/eventsWeek', {
+      params: { startStr, endStr },
+    });
     calendarOptions.events = response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
   }
+}
+
+function handleDatesSet(info: { startStr: string; endStr: string }) {
+  fetchEventsWeek(info.startStr);
 }
 
 onMounted(() => {
