@@ -5,9 +5,11 @@ import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import formEvent from 'pages/planning/events/formEvent.vue';
 
 const currentIndex = ref(0);
 const resourcesPerPage = 2;
+const openForm = ref(true);
 
 const allResources = [
   { id: '1', building: '460 Bryant', title: 'Auditorium A' },
@@ -88,6 +90,11 @@ function prevResources() {
       >
     </div>
     <FullCalendar :options="calendarOptions" />
+    <q-dialog v-model="openForm">
+      <q-card class="bg-white">
+        <form-event></form-event>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 

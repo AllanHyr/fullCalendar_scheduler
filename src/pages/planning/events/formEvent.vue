@@ -48,10 +48,14 @@ watch(
     selectedPiece.value = newValue;
   }
 );
+
+const onSubmit = () => {
+  alert('test');
+};
 </script>
 
 <template>
-  <q-form>
+  <q-form @submit="onSubmit">
     <q-select
       v-model="selectedSalle"
       :options="sallesOptions"
@@ -119,5 +123,6 @@ watch(
         </q-icon>
       </template>
     </q-input>
+    <q-btn label="Valider" type="submit" color="primary" />
   </q-form>
 </template>
