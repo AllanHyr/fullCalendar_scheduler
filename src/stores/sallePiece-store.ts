@@ -8,7 +8,20 @@ interface SallePieceState {
   fkpiece: number;
 }
 
-export const useSallePieceStore = defineStore<'sallePiece', SallePieceState>({
+interface SallePieceActions {
+  setResources(salles: Salles[], pieces: Pieces[]): void;
+  setSalle(fksalle: number): void;
+  setPiece(fkpiece: number): void;
+}
+
+export type SallePieceStore = SallePieceState & SallePieceActions;
+
+export const useSallePieceStore = defineStore<
+  'sallePiece',
+  SallePieceState,
+  Record<string, never>, // This explicitly types the getters as an empty object
+  SallePieceActions
+>({
   id: 'sallePiece',
   state: (): SallePieceState => ({
     salles: [],

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
+import { reactive } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import multiMonthPlugin from '@fullcalendar/multimonth';
