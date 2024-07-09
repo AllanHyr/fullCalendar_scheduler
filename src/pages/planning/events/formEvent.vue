@@ -7,6 +7,9 @@ const sallePieceStore = useSallePieceStore();
 const selectedSalle = ref(sallePieceStore.fksalle);
 const selectedPiece = ref(sallePieceStore.fkpiece);
 
+const eventText = ref('');
+const date = ref('2019-02-01 12:44');
+
 const sallesOptions = computed(() =>
   sallePieceStore.salles.map((salle) => ({
     label: salle.title,
@@ -65,5 +68,56 @@ watch(
       map-options
       @input="onPieceChange"
     />
+    <q-input v-model="eventText" label="Événement" />
+    <q-input label="date de fin" v-model="date">
+      <template v-slot:prepend>
+        <q-icon name="event" class="cursor-pointer">
+          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+            <q-date v-model="date" mask="YYYY-MM-DD HH:mm">
+              <div class="row items-center justify-end">
+                <q-btn v-close-popup label="Close" color="primary" flat />
+              </div>
+            </q-date>
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+
+      <template v-slot:append>
+        <q-icon name="access_time" class="cursor-pointer">
+          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+            <q-time v-model="date" mask="YYYY-MM-DD HH:mm" format24h>
+              <div class="row items-center justify-end">
+                <q-btn v-close-popup label="Close" color="primary" flat />
+              </div>
+            </q-time>
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+    </q-input>
+    <q-input label="date de début" v-model="date">
+      <template v-slot:prepend>
+        <q-icon name="event" class="cursor-pointer">
+          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+            <q-date v-model="date" mask="YYYY-MM-DD HH:mm">
+              <div class="row items-center justify-end">
+                <q-btn v-close-popup label="Close" color="primary" flat />
+              </div>
+            </q-date>
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+
+      <template v-slot:append>
+        <q-icon name="access_time" class="cursor-pointer">
+          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+            <q-time v-model="date" mask="YYYY-MM-DD HH:mm" format24h>
+              <div class="row items-center justify-end">
+                <q-btn v-close-popup label="Close" color="primary" flat />
+              </div>
+            </q-time>
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+    </q-input>
   </q-form>
 </template>
