@@ -4,6 +4,7 @@ import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 const currentIndex = ref(0);
 const resourcesPerPage = 2;
@@ -24,12 +25,26 @@ const paginatedResources = computed(() => {
 });
 
 const calendarOptions = reactive({
-  plugins: [resourceTimeGridPlugin, resourceDayGridPlugin],
+  plugins: [resourceTimeGridPlugin, resourceDayGridPlugin, interactionPlugin],
   initialView: 'resourceTimeGridDay',
   locale: 'fr',
+  selectable: true,
   events: [],
   datesSet: handleDatesSet,
   resources: paginatedResources,
+  dateClick: function (info) {
+    alert('clicked ' + info.dateStr + ' on resource ' + info.resource.id);
+  },
+  select: function (info) {
+    alert(
+      'selected ' +
+        info.startStr +
+        ' to ' +
+        info.endStr +
+        ' on resource ' +
+        info.resource.id
+    );
+  },
 });
 
 async function fetchEvents(start: string, end: string) {
@@ -79,7 +94,7 @@ function prevResources() {
 <style scoped>
 .pagination-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   margin-top: 10px;
 }
 </style>

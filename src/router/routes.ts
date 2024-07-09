@@ -25,6 +25,10 @@ const routes: RouteRecordRaw[] = [
         path: 'weekTimeline',
         component: () => import('src/pages/planning/weekTimelineView.vue'),
       },
+      {
+        path: 'test',
+        component: () => import('src/pages/planning/events/formEvent.vue'),
+      },
     ],
   },
 
