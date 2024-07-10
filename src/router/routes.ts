@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'test',
-        component: () => import('src/pages/planning/events/formEvent.vue'),
+        component: () => import('src/components/formEvent.vue'),
       },
     ],
   },

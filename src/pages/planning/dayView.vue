@@ -5,11 +5,11 @@ import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import formEvent from 'pages/planning/events/formEvent.vue';
+import formEvent from 'src/components/formEvent.vue';
 
 const currentIndex = ref(0);
 const resourcesPerPage = 2;
-const openForm = ref(true);
+const openForm = ref(false);
 
 const allResources = [
   { id: '1', building: '460 Bryant', title: 'Auditorium A' },
@@ -35,9 +35,11 @@ const calendarOptions = reactive({
   datesSet: handleDatesSet,
   resources: paginatedResources,
   dateClick: function (info) {
+    openForm.value = true;
     alert('clicked ' + info.dateStr + ' on resource ' + info.resource.id);
   },
   select: function (info) {
+    openForm.value = true;
     alert(
       'selected ' +
         info.startStr +
@@ -91,7 +93,7 @@ function prevResources() {
     </div>
     <FullCalendar :options="calendarOptions" />
     <q-dialog v-model="openForm">
-      <q-card class="bg-white">
+      <q-card class="bg-white q-pa-md">
         <form-event></form-event>
       </q-card>
     </q-dialog>
