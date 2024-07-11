@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { useSallePieceStore } from 'stores/sallePiece-store';
+import { onMounted, ref } from 'vue';
 import { api } from 'boot/axios';
 import moment from 'moment';
-
-const sallePieceStore = useSallePieceStore();
-
-const selectedSalle = ref<number | null>(sallePieceStore.fksalle);
-const selectedPiece = ref<number | null>(sallePieceStore.fkpiece);
 
 const props = defineProps<{
   startDate: string;
@@ -19,24 +13,10 @@ const eventText = ref('');
 const dateStart = ref('');
 const dateEnd = ref('');
 
-watch(
-  () => sallePieceStore.fksalle,
-  (newValue) => {
-    selectedSalle.value = newValue;
-  }
-);
-
-watch(
-  () => sallePieceStore.fkpiece,
-  (newValue) => {
-    selectedPiece.value = newValue;
-  }
-);
-
 async function addEvent() {
   let eventData = {
-    start_date: moment(dateStart.value).format('YYYY-DD-MM HH:mm'),
-    end_date: moment(dateEnd.value).format('YYYY-DD-MM HH:mm'),
+    start_date: moment(dateStart.value).format('YYYY-MM-DD HH:mm'),
+    end_date: moment(dateEnd.value).format('YYYY-MM-DD HH:mm'),
     text: eventText.value,
     section_id: props.resourceId,
   };
