@@ -1,39 +1,23 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useSallePieceStore } from 'stores/sallePiece-store';
+import { api } from 'boot/axios';
+import moment from 'moment';
 
 const sallePieceStore = useSallePieceStore();
 
-const selectedSalle = ref(sallePieceStore.fksalle);
-const selectedPiece = ref(sallePieceStore.fkpiece);
+const selectedSalle = ref<number | null>(sallePieceStore.fksalle);
+const selectedPiece = ref<number | null>(sallePieceStore.fkpiece);
+
+const props = defineProps<{
+  startDate: string;
+  endDate: string;
+  resourceId: number | null;
+}>();
 
 const eventText = ref('');
-const date = ref('2019-02-01 12:44');
-
-const sallesOptions = computed(() =>
-  sallePieceStore.salles.map((salle) => ({
-    label: salle.title,
-    value: salle.id,
-  }))
-);
-
-const piecesOptions = computed(() =>
-  sallePieceStore.pieces
-    .filter((piece) => piece.groupId === selectedSalle.value)
-    .map((piece) => ({
-      label: piece.title,
-      value: piece.id,
-    }))
-);
-
-const onSalleChange = (value: number) => {
-  sallePieceStore.setSalle(value);
-  selectedPiece.value = 0; // Reset piece selection when salle changes
-};
-
-const onPieceChange = (value: number) => {
-  sallePieceStore.setPiece(value);
-};
+const dateStart = ref('');
+const dateEnd = ref('');
 
 watch(
   () => sallePieceStore.fksalle,
@@ -49,35 +33,39 @@ watch(
   }
 );
 
+async function addEvent() {
+  let eventData = {
+    start_date: moment(dateStart.value).format('YYYY-DD-MM HH:mm'),
+    end_date: moment(dateEnd.value).format('YYYY-DD-MM HH:mm'),
+    text: eventText.value,
+    section_id: props.resourceId,
+  };
+  try {
+    const response = await api.post('/events', eventData);
+    console.log('Event inserted:', response.data);
+  } catch (error) {
+    console.error('Error inserting event:', error);
+  }
+}
+
+onMounted(() => {
+  dateStart.value = moment(props.startDate).format('DD/MM/YYYY HH:mm');
+  dateEnd.value = moment(props.endDate).format('DD/MM/YYYY HH:mm');
+});
+
 const onSubmit = () => {
-  alert('test');
+  addEvent();
 };
 </script>
 
 <template>
   <q-form @submit="onSubmit">
-    <q-select
-      v-model="selectedSalle"
-      :options="sallesOptions"
-      label="Ma salle"
-      emit-value
-      map-options
-      @input="onSalleChange"
-    />
-    <q-select
-      v-model="selectedPiece"
-      :options="piecesOptions"
-      label="Ma pièce"
-      emit-value
-      map-options
-      @input="onPieceChange"
-    />
-    <q-input v-model="eventText" label="Événement" />
-    <q-input label="date de fin" v-model="date">
+    <q-input v-model="eventText" label="Événement" class="q-mb-md" />
+    <q-input label="date de fin" v-model="dateStart" class="q-mb-md">
       <template v-slot:prepend>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-            <q-date v-model="date" mask="YYYY-MM-DD HH:mm">
+            <q-date v-model="dateStart" mask="YYYY-MM-DD HH:mm">
               <div class="row items-center justify-end">
                 <q-btn v-close-popup label="Close" color="primary" flat />
               </div>
@@ -89,7 +77,7 @@ const onSubmit = () => {
       <template v-slot:append>
         <q-icon name="access_time" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-            <q-time v-model="date" mask="YYYY-MM-DD HH:mm" format24h>
+            <q-time v-model="dateStart" mask="YYYY-MM-DD HH:mm" format24h>
               <div class="row items-center justify-end">
                 <q-btn v-close-popup label="Close" color="primary" flat />
               </div>
@@ -98,11 +86,11 @@ const onSubmit = () => {
         </q-icon>
       </template>
     </q-input>
-    <q-input label="date de début" v-model="date">
+    <q-input label="date de début" v-model="dateEnd" class="q-mb-md">
       <template v-slot:prepend>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-            <q-date v-model="date" mask="YYYY-MM-DD HH:mm">
+            <q-date v-model="dateEnd" mask="YYYY-MM-DD HH:mm">
               <div class="row items-center justify-end">
                 <q-btn v-close-popup label="Close" color="primary" flat />
               </div>
@@ -114,7 +102,7 @@ const onSubmit = () => {
       <template v-slot:append>
         <q-icon name="access_time" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-            <q-time v-model="date" mask="YYYY-MM-DD HH:mm" format24h>
+            <q-time v-model="dateEnd" mask="YYYY-MM-DD HH:mm" format24h>
               <div class="row items-center justify-end">
                 <q-btn v-close-popup label="Close" color="primary" flat />
               </div>
@@ -123,6 +111,8 @@ const onSubmit = () => {
         </q-icon>
       </template>
     </q-input>
-    <q-btn label="Valider" type="submit" color="primary" />
+    <div class="row justify-center">
+      <q-btn label="Valider" type="submit" color="primary" />
+    </div>
   </q-form>
 </template>

@@ -4,8 +4,8 @@ import { Salles, Pieces } from 'src/components/models';
 interface SallePieceState {
   salles: Salles[];
   pieces: Pieces[];
-  fksalle: number;
-  fkpiece: number;
+  fksalle: number | null;
+  fkpiece: number | null;
 }
 
 interface SallePieceActions {
@@ -26,8 +26,8 @@ export const useSallePieceStore = defineStore<
   state: (): SallePieceState => ({
     salles: [],
     pieces: [],
-    fksalle: 0,
-    fkpiece: 0,
+    fksalle: null,
+    fkpiece: null,
   }),
   getters: {},
   actions: {

@@ -6,18 +6,20 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import formEvent from 'src/components/formEvent.vue';
+import { useSallePieceStore } from 'stores/sallePiece-store';
+
+const sallePieceStore = useSallePieceStore();
 
 const currentIndex = ref(0);
-const resourcesPerPage = 2;
+const resourcesPerPage = 5;
 const openForm = ref(false);
 
-const allResources = [
-  { id: '1', building: '460 Bryant', title: 'Auditorium A' },
-  { id: '2', building: '460 Bryant', title: 'Auditorium B' },
-  { id: '3', building: '460 Bryant', title: 'Auditorium C' },
-  { id: '4', building: '460 Bryant', title: 'Auditorium D' },
-  { id: '5', building: '460 Bryant', title: 'Auditorium E' },
-];
+const startDate = ref('');
+const endDate = ref('');
+
+const resourceId = ref<number | null>(null);
+
+const allResources = sallePieceStore.pieces;
 
 const paginatedResources = computed(() => {
   return allResources.slice(
@@ -36,18 +38,15 @@ const calendarOptions = reactive({
   resources: paginatedResources,
   dateClick: function (info) {
     openForm.value = true;
-    alert('clicked ' + info.dateStr + ' on resource ' + info.resource.id);
+    resourceId.value = info.resource.id;
+    startDate.value = info.startStr;
+    endDate.value = info.endStr;
   },
   select: function (info) {
     openForm.value = true;
-    alert(
-      'selected ' +
-        info.startStr +
-        ' to ' +
-        info.endStr +
-        ' on resource ' +
-        info.resource.id
-    );
+    resourceId.value = info.resource.id;
+    startDate.value = info.startStr;
+    endDate.value = info.endStr;
   },
 });
 
@@ -94,7 +93,11 @@ function prevResources() {
     <FullCalendar :options="calendarOptions" />
     <q-dialog v-model="openForm">
       <q-card class="bg-white q-pa-md">
-        <form-event></form-event>
+        <form-event
+          :startDate="startDate"
+          :endDate="endDate"
+          :resourceId="resourceId"
+        ></form-event>
       </q-card>
     </q-dialog>
   </div>
