@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, watch } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
@@ -33,6 +33,7 @@ const calendarOptions = reactive({
   plugins: [resourceTimeGridPlugin, resourceDayGridPlugin, interactionPlugin],
   initialView: 'resourceTimeGridDay',
   locale: 'fr',
+  resourceOrder: 'groupId',
   selectable: true,
   events: [],
   datesSet: handleDatesSet,
