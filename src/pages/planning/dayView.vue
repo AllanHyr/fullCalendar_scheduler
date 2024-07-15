@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import formEvent from 'src/components/formEvent.vue';
+import $ from 'jquery';
 import { useSallePieceStore } from 'stores/sallePiece-store';
 
 const sallePieceStore = useSallePieceStore();
 
 const currentIndex = ref(0);
-const resourcesPerPage = 5;
+const resourcesPerPage = 25;
 const openForm = ref(false);
 
 const startDate = ref('');
@@ -19,7 +20,7 @@ const endDate = ref('');
 
 const resourceId = ref<number | null>(null);
 
-const allResources = sallePieceStore.pieces;
+const allResources = sortedPieces();
 
 const paginatedResources = computed(() => {
   return allResources.slice(
@@ -61,6 +62,45 @@ async function fetchEvents(start: string, end: string) {
   }
 }
 
+function sortedPieces() {
+  return sallePieceStore.pieces.sort((a, b) => a.groupId - b.groupId);
+}
+
+async function showSalleHeader() {
+  // affichage des salles
+  let header = await $('.q-page-container .fc-col-header').find('thead');
+  let trElem = document.createElement('tr');
+  let oldTr = document.getElementsByClassName('liste_salle_thead');
+  if (oldTr.length > 0) {
+    oldTr[0].remove();
+  }
+  trElem.className = 'liste_salle_thead';
+  let resources = allResources;
+  let tdElem = document.createElement('td');
+  let tableGroupID = [];
+  for (let i = 0; i < resources.length; i++) {
+    if (!tableGroupID[resources[i].groupId]) {
+      tableGroupID[resources[i].groupId] = 0;
+    }
+    tableGroupID[resources[i].groupId]++;
+  }
+  tdElem.className = 'fc-timegrid-axis-top';
+  trElem.append(tdElem);
+  let color = true;
+  sallePieceStore.salles.forEach((salle) => {
+    let colspan = tableGroupID[salle.id];
+    if (colspan > 0) {
+      let tmpTd = document.createElement('td');
+      tmpTd.setAttribute('colspan', colspan);
+      tmpTd.className = 'color_salle_header' + (color ? '_odd' : '_even');
+      tmpTd.append(salle.title);
+      trElem.append(tmpTd);
+    }
+    color = !color;
+  });
+  header.prepend(trElem);
+}
+
 function handleDatesSet(info: { startStr: string; endStr: string }) {
   fetchEvents(info.startStr, info.endStr);
 }
@@ -76,6 +116,10 @@ function prevResources() {
     currentIndex.value -= resourcesPerPage;
   }
 }
+
+onMounted(() => {
+  showSalleHeader();
+});
 </script>
 
 <template>
