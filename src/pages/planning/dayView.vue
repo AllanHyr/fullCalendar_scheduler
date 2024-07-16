@@ -15,6 +15,9 @@ const currentIndex = ref(0);
 const resourcesPerPage = 25;
 const openForm = ref(false);
 
+const startDateDay = ref('');
+const endDateDay = ref('');
+
 const startDate = ref('');
 const endDate = ref('');
 
@@ -102,8 +105,10 @@ async function showSalleHeader() {
   header.prepend(trElem);
 }
 
-function handleDatesSet(info: { startStr: string; endStr: string }) {
-  fetchEvents(info.startStr, info.endStr);
+async function handleDatesSet(info: { startStr: string; endStr: string }) {
+  startDateDay.value = info.startStr;
+  endDateDay.value = info.endStr;
+  await fetchEvents(info.startStr, info.endStr);
 }
 
 function nextResources() {
@@ -118,8 +123,9 @@ function prevResources() {
   }
 }
 
-const changeForm = () => {
+const changeForm = async () => {
   openForm.value = !openForm.value;
+  await fetchEvents(startDateDay.value, endDateDay.value);
 };
 
 onMounted(() => {

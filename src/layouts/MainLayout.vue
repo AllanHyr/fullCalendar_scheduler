@@ -84,7 +84,7 @@ const linksTypeAgenda = reactive<Link[]>([
   },
 ]);
 
-onMounted(() => {
-  getRessource();
+onMounted(async () => {
+  await getRessource();
 });
 </script>
