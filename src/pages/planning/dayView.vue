@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, watch } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
@@ -118,6 +118,10 @@ function prevResources() {
   }
 }
 
+const changeForm = () => {
+  openForm.value = !openForm.value;
+};
+
 onMounted(() => {
   showSalleHeader();
 });
@@ -139,6 +143,7 @@ onMounted(() => {
     <q-dialog v-model="openForm">
       <q-card class="bg-white q-pa-md">
         <form-event
+          @update-openForm="changeForm"
           :startDate="startDate"
           :endDate="endDate"
           :resourceId="resourceId"

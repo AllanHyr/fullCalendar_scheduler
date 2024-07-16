@@ -9,20 +9,32 @@ const props = defineProps<{
   resourceId: number | null;
 }>();
 
+const emit = defineEmits(['update-openForm']);
+
+const updateParent = () => {
+  emit('update-openForm');
+};
+
 const eventText = ref('');
 const dateStart = ref('');
 const dateEnd = ref('');
 
 async function addEvent() {
+  console.log(dateStart.value, dateEnd.value);
   let eventData = {
-    start_date: moment(dateStart.value).format('YYYY-MM-DD HH:mm'),
-    end_date: moment(dateEnd.value).format('YYYY-MM-DD HH:mm'),
+    start_date: moment(dateStart.value, 'DD/MM/YYYY HH:mm').format(
+      'YYYY-MM-DD HH:mm'
+    ),
+    end_date: moment(dateEnd.value, 'DD/MM/YYYY HH:mm').format(
+      'YYYY-MM-DD HH:mm'
+    ),
     text: eventText.value,
     section_id: props.resourceId,
   };
   try {
     const response = await api.post('/events', eventData);
     console.log('Event inserted:', response.data);
+    updateParent();
   } catch (error) {
     console.error('Error inserting event:', error);
   }
@@ -53,7 +65,6 @@ const onSubmit = () => {
           </q-popup-proxy>
         </q-icon>
       </template>
-
       <template v-slot:append>
         <q-icon name="access_time" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -78,7 +89,6 @@ const onSubmit = () => {
           </q-popup-proxy>
         </q-icon>
       </template>
-
       <template v-slot:append>
         <q-icon name="access_time" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
