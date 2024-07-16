@@ -6,6 +6,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import formEvent from 'src/components/formEvent.vue';
 
+const startDateDay = ref('');
+const endDateDay = ref('');
+
 const openForm = ref(false);
 const startDate = ref('');
 const endDate = ref('');
@@ -19,9 +22,8 @@ const calendarOptions = reactive({
   datesSet: handleDatesSet,
   events: [],
   dateClick: function (info) {
-    alert('Clicked on: ' + info.startStr);
     openForm.value = true;
-    resourceId.value = info.resource.id;
+    // TO DO : trouver un moyen de récupérer l'id de la ressource (store ?)
     startDate.value = info.startStr;
     endDate.value = info.endStr;
   },
@@ -44,7 +46,14 @@ async function fetchEvents(start: string, end: string) {
   }
 }
 
+const changeForm = async () => {
+  openForm.value = !openForm.value;
+  await fetchEvents(startDateDay.value, endDateDay.value);
+};
+
 function handleDatesSet(info: { startStr: string; endStr: string }) {
+  startDateDay.value = info.startStr;
+  endDateDay.value = info.endStr;
   fetchEvents(info.startStr, info.endStr);
 }
 </script>
@@ -54,6 +63,7 @@ function handleDatesSet(info: { startStr: string; endStr: string }) {
   <q-dialog v-model="openForm">
     <q-card class="bg-white q-pa-md">
       <form-event
+        @update-openForm="changeForm"
         :startDate="startDate"
         :endDate="endDate"
         :resourceId="resourceId"
