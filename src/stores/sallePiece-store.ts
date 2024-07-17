@@ -1,15 +1,20 @@
 import { defineStore } from 'pinia';
-import { Salles, Pieces } from 'src/components/models';
+import { Salles, Pieces, Batiments } from 'src/components/models';
 
 interface SallePieceState {
   salles: Salles[];
   pieces: Pieces[];
+  batiments: Batiments[];
   fksalle: number | null;
   fkpiece: number | null;
 }
 
 interface SallePieceActions {
-  setResources(salles: Salles[], pieces: Pieces[]): void;
+  setResources(
+    salles: Salles[],
+    pieces: Pieces[],
+    batiments: Batiments[]
+  ): void;
   setSalle(fksalle: number): void;
   setPiece(fkpiece: number): void;
 }
@@ -26,14 +31,16 @@ export const useSallePieceStore = defineStore<
   state: (): SallePieceState => ({
     salles: [],
     pieces: [],
+    batiments: [],
     fksalle: null,
     fkpiece: null,
   }),
   getters: {},
   actions: {
-    setResources(salles: Salles[], pieces: Pieces[]) {
+    setResources(salles: Salles[], pieces: Pieces[], batiments: Batiments[]) {
       this.salles = salles;
       this.pieces = pieces;
+      this.batiments = batiments;
     },
     setSalle(fksalle: number) {
       this.fksalle = fksalle;

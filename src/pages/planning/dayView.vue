@@ -9,21 +9,24 @@ import formEvent from 'src/components/formEvent.vue';
 import $ from 'jquery';
 import { useSallePieceStore } from 'stores/sallePiece-store';
 
+// Store
 const sallePieceStore = useSallePieceStore();
 
+// Pagination
 const currentIndex = ref(0);
 const resourcesPerPage = 25;
-const openForm = ref(false);
 
+// Date de début/fin de l'appel ajax
 const startDateDay = ref('');
 const endDateDay = ref('');
 
+// Informations pour la création d'un nouvel event
 const startDate = ref('');
 const endDate = ref('');
-
 const resourceId = ref<number | null>(null);
+const openForm = ref(false);
 
-const allResources = sortedPieces();
+const allResources = sallePieceStore.pieces;
 
 const paginatedResources = computed(() => {
   return allResources.slice(
@@ -66,13 +69,9 @@ async function fetchEvents(start: string, end: string) {
   }
 }
 
-function sortedPieces() {
-  return sallePieceStore.pieces.sort((a, b) => a.groupId - b.groupId);
-}
-
 async function showSalleHeader() {
   // affichage des salles
-  let header = await $('.q-page-container .fc-col-header').find('thead');
+  let header = $('.q-page-container .fc-col-header').find('thead');
   let trElem = document.createElement('tr');
   let oldTr = document.getElementsByClassName('liste_salle_thead');
   if (oldTr.length > 0) {
@@ -91,7 +90,7 @@ async function showSalleHeader() {
   tdElem.className = 'fc-timegrid-axis-top';
   trElem.append(tdElem);
   let color = true;
-  sallePieceStore.salles.forEach((salle) => {
+  await sallePieceStore.salles.forEach((salle) => {
     let colspan = tableGroupID[salle.id];
     if (colspan > 0) {
       let tmpTd = document.createElement('td');

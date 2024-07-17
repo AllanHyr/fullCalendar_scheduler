@@ -6,9 +6,11 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import formEvent from 'src/components/formEvent.vue';
 
+// Date de début/fin de l'appel ajax
 const startDateDay = ref('');
 const endDateDay = ref('');
 
+// Informations pour la création d'un nouvel event
 const openForm = ref(false);
 const startDate = ref('');
 const endDate = ref('');

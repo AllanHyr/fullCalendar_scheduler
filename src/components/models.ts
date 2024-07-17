@@ -14,9 +14,15 @@ export interface Link {
   link: string;
 }
 
+export interface Batiments {
+  id: number;
+  title: string;
+}
+
 export interface Salles {
   id: number;
   title: string;
+  groupId: number;
 }
 
 export interface Pieces {

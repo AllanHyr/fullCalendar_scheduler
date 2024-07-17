@@ -27,7 +27,7 @@ import { onMounted, reactive } from 'vue';
 import { Link } from 'components/models';
 import { api } from 'boot/axios';
 import { useSallePieceStore } from 'stores/sallePiece-store';
-import { Salles, Pieces } from 'src/components/models';
+import { Salles, Pieces, Batiments } from 'src/components/models';
 
 const sallePieceStore = useSallePieceStore();
 
@@ -45,9 +45,16 @@ async function getRessource() {
       return {
         id: e.id,
         title: e.title,
+        groupId: e.groupId,
       };
     });
-    sallePieceStore.setResources(salles, pieces);
+    let batiments = data.batiments.map(function (e: Batiments) {
+      return {
+        id: e.id,
+        title: e.title,
+      };
+    });
+    sallePieceStore.setResources(salles, pieces, batiments);
   });
 }
 
