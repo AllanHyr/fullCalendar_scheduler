@@ -26,10 +26,10 @@ const endDate = ref('');
 const resourceId = ref<number | null>(null);
 const openForm = ref(false);
 
-const allResources = sallePieceStore.pieces;
+const allResources = computed(() => sallePieceStore.pieces);
 
 const paginatedResources = computed(() => {
-  return allResources.slice(
+  return allResources.value.slice(
     currentIndex.value,
     currentIndex.value + resourcesPerPage
   );
@@ -78,7 +78,7 @@ async function showSalleHeader() {
     oldTr[0].remove();
   }
   trElem.className = 'liste_salle_thead';
-  let resources = allResources;
+  let resources = allResources.value;
   let tdElem = document.createElement('td');
   let tableGroupID = [];
   for (let i = 0; i < resources.length; i++) {
@@ -113,7 +113,7 @@ async function showBatimentHeader() {
     oldTr[0].remove();
   }
   trElem.className = 'liste_batiment_thead';
-  let resources = allResources;
+  let resources = allResources.value;
   let tdElem = document.createElement('td');
   let tableGroupID: number[] = [];
   for (let i = 0; i < resources.length; i++) {
@@ -151,7 +151,7 @@ async function handleDatesSet(info: { startStr: string; endStr: string }) {
 }
 
 function nextResources() {
-  if (currentIndex.value + resourcesPerPage < allResources.length) {
+  if (currentIndex.value + resourcesPerPage < allResources.value.length) {
     currentIndex.value += resourcesPerPage;
   }
 }

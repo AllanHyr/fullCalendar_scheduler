@@ -1,35 +1,13 @@
-<template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          v-for="link in linksTypeAgenda"
-          :key="link.title"
-          v-bind="link"
-          @click="$router.push(link.link)"
-          class="q-pa-sm"
-        >
-          <q-tooltip>
-            {{ link.title }}
-          </q-tooltip>
-        </q-btn>
-      </q-toolbar>
-    </q-header>
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
-</template>
-
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { Link } from 'components/models';
 import { api } from 'boot/axios';
 import { useSallePieceStore } from 'stores/sallePiece-store';
 import { Salles, Pieces, Batiments } from 'src/components/models';
 
 const sallePieceStore = useSallePieceStore();
+
+const ressource = ref(null);
 
 async function getRessource() {
   await api.get('/pieceSalle').then((response) => {
@@ -91,7 +69,67 @@ const linksTypeAgenda = reactive<Link[]>([
   },
 ]);
 
+function optionsRessources() {
+  let options = [];
+  {
+    options.push({
+      label: 'Toutes les infrastructures',
+      value: 0,
+    });
+    sallePieceStore.salles.forEach((salle) => {
+      options.push({
+        label: salle.title,
+        value: salle.id,
+      });
+    });
+  }
+  return options;
+}
+
 onMounted(async () => {
   await getRessource();
 });
 </script>
+
+<template>
+  <q-layout view="lHh Lpr lFf">
+    <q-header elevated>
+      <div class="row no-wrap shadow-1">
+        <q-toolbar class="col-3 bg-primary text-white">
+          <q-btn
+            v-for="link in linksTypeAgenda"
+            :key="link.title"
+            v-bind="link"
+            @click="$router.push(link.link)"
+            class="q-pa-sm"
+          >
+            <q-tooltip>
+              {{ link.title }}
+            </q-tooltip>
+          </q-btn>
+        </q-toolbar>
+        <q-toolbar class="col-3 bg-primary text-white">
+          <q-select
+            style="width: 100%; margin-right: auto; margin-left: auto"
+            class="print-hide bg-white rounded-borders q-px-sm"
+            v-model="ressource"
+            @update:model-value="changeValue()"
+            :options="optionsRessources()"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  Pas de résultats
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+        </q-toolbar>
+      </div>
+    </q-header>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
+</template>
