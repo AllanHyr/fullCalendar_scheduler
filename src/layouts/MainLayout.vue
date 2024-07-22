@@ -74,16 +74,20 @@ function optionsRessources() {
   {
     options.push({
       label: 'Toutes les infrastructures',
-      value: 0,
+      id: null,
     });
     sallePieceStore.salles.forEach((salle) => {
       options.push({
         label: salle.title,
-        value: salle.id,
+        id: salle.id,
       });
     });
   }
   return options;
+}
+
+function changeValue() {
+  sallePieceStore.setSalle(ressource.value.id);
 }
 
 onMounted(async () => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, watch } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
@@ -26,7 +26,14 @@ const endDate = ref('');
 const resourceId = ref<number | null>(null);
 const openForm = ref(false);
 
-const allResources = computed(() => sallePieceStore.pieces);
+// Correction de la logique de filtrage
+const allResources = computed(() => {
+  return sallePieceStore.fksalle === null
+    ? sallePieceStore.pieces
+    : sallePieceStore.pieces.filter(
+        (piece) => piece.groupId === sallePieceStore.fksalle
+      );
+});
 
 const paginatedResources = computed(() => {
   return allResources.value.slice(
@@ -43,7 +50,7 @@ const calendarOptions = reactive({
   selectable: true,
   events: [],
   datesSet: handleDatesSet,
-  resources: paginatedResources,
+  resources: paginatedResources.value,
   dateClick: function (info) {
     openForm.value = true;
     resourceId.value = info.resource.id;
@@ -168,6 +175,12 @@ const changeForm = async () => {
 };
 
 onMounted(() => {
+  showSalleHeader();
+  showBatimentHeader();
+});
+
+watch(allResources, (newValue) => {
+  calendarOptions.resources = paginatedResources.value;
   showSalleHeader();
   showBatimentHeader();
 });

@@ -15,8 +15,8 @@ interface SallePieceActions {
     pieces: Pieces[],
     batiments: Batiments[]
   ): void;
-  setSalle(fksalle: number): void;
-  setPiece(fkpiece: number): void;
+  setSalle(fksalle: number | null): void;
+  setPiece(fkpiece: number | null): void;
 }
 
 export type SallePieceStore = SallePieceState & SallePieceActions;
