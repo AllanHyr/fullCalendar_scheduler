@@ -179,7 +179,7 @@ onMounted(() => {
   showBatimentHeader();
 });
 
-watch(allResources, (newValue) => {
+watch(allResources, () => {
   calendarOptions.resources = paginatedResources.value;
   showSalleHeader();
   showBatimentHeader();

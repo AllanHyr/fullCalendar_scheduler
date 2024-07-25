@@ -1,38 +1,48 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
-import { Link } from 'components/models';
+import { Link, Ressources } from 'components/models';
 import { api } from 'boot/axios';
 import { useSallePieceStore } from 'stores/sallePiece-store';
+import { useRessourceStore } from 'stores/ressource-store';
 import { Salles, Pieces, Batiments } from 'src/components/models';
 
 const sallePieceStore = useSallePieceStore();
+const ressourceStore = useRessourceStore();
 
 const ressource = ref(null);
 
 async function getRessource() {
   await api.get('/pieceSalle').then((response) => {
     let data = response.data;
-    let pieces = data.pieces.map(function (e: Pieces) {
-      return {
-        id: e.id,
-        title: e.title,
-        groupId: e.groupId,
-      };
-    });
-    let salles = data.salles.map(function (e: Salles) {
-      return {
-        id: e.id,
-        title: e.title,
-        groupId: e.groupId,
-      };
-    });
-    let batiments = data.batiments.map(function (e: Batiments) {
-      return {
-        id: e.id,
-        title: e.title,
-      };
-    });
-    sallePieceStore.setResources(salles, pieces, batiments);
+    let niveau: string | number = '0';
+    let array: Ressources[] = [];
+
+    hydrate(data);
+
+    function hydrate(level) {
+      for (let i = 0; i < level.length; i++) {
+        let niveauArray = niveau.split('-');
+        console.log('test');
+        niveauArray[niveauArray.length - 1] = i;
+        niveau = niveauArray.join('-');
+
+        let key = niveau;
+        array.push({
+          id: level[i].id,
+          title: level[i].title,
+          key: key,
+        });
+        if (!!level[i].children) {
+          niveau = niveau + '-' + i;
+          hydrate(level[i].children);
+        }
+        if (level.length === i + 1) {
+          niveauArray.pop();
+        }
+        niveau = niveauArray.join('-');
+      }
+    }
+    ressourceStore.setRessources(array);
   });
 }
 
@@ -133,6 +143,7 @@ onMounted(async () => {
     </q-header>
 
     <q-page-container>
+      {{ ressourceStore.ressources }}
       <router-view />
     </q-page-container>
   </q-layout>

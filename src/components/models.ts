@@ -38,3 +38,9 @@ export interface Option {
   value?: number;
   fksalle?: number;
 }
+
+export interface Ressources {
+  id: number;
+  title: string;
+  key: string | number;
+}
