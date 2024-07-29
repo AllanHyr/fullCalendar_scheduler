@@ -8,13 +8,17 @@ import interactionPlugin from '@fullcalendar/interaction';
 import formEvent from 'src/components/formEvent.vue';
 import $ from 'jquery';
 import { useSallePieceStore } from 'stores/sallePiece-store';
+import { useRessourceStore } from 'stores/ressource-store';
 
 // Store
 const sallePieceStore = useSallePieceStore();
+const ressourcesStore = useRessourceStore();
 
 // Pagination
 const currentIndex = ref(0);
 const resourcesPerPage = 25;
+
+const test = ressourcesStore.getRessources;
 
 // Date de début/fin de l'appel ajax
 const startDateDay = ref('');
@@ -188,6 +192,7 @@ watch(allResources, () => {
 
 <template>
   <div>
+    {{ test }}
     <div class="pagination-controls">
       <q-btn @click="prevResources" :disable="currentIndex === 0"
         >Previous</q-btn

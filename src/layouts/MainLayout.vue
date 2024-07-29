@@ -4,7 +4,6 @@ import { Link, Ressources } from 'components/models';
 import { api } from 'boot/axios';
 import { useSallePieceStore } from 'stores/sallePiece-store';
 import { useRessourceStore } from 'stores/ressource-store';
-import { Salles, Pieces, Batiments } from 'src/components/models';
 
 const sallePieceStore = useSallePieceStore();
 const ressourceStore = useRessourceStore();
@@ -22,7 +21,6 @@ async function getRessource() {
     function hydrate(level) {
       for (let i = 0; i < level.length; i++) {
         let niveauArray = niveau.split('-');
-        console.log('test');
         niveauArray[niveauArray.length - 1] = i;
         niveau = niveauArray.join('-');
 
@@ -143,7 +141,6 @@ onMounted(async () => {
     </q-header>
 
     <q-page-container>
-      {{ ressourceStore.ressources }}
       <router-view />
     </q-page-container>
   </q-layout>
