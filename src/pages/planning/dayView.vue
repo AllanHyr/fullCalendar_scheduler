@@ -7,18 +7,14 @@ import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import formEvent from 'src/components/formEvent.vue';
 import $ from 'jquery';
-import { useSallePieceStore } from 'stores/sallePiece-store';
 import { useRessourceStore } from 'stores/ressource-store';
 
 // Store
-const sallePieceStore = useSallePieceStore();
 const ressourcesStore = useRessourceStore();
 
 // Pagination
 const currentIndex = ref(0);
 const resourcesPerPage = 25;
-
-const test = ressourcesStore.getRessources;
 
 // Date de début/fin de l'appel ajax
 const startDateDay = ref('');
@@ -32,7 +28,7 @@ const openForm = ref(false);
 
 // Correction de la logique de filtrage
 const allResources = computed(() => {
-  return test.filter(
+  return ressourcesStore.getRessources.filter(
     (ressource) => ressource.niveau === ressourcesStore.nbRessources
   );
 });
@@ -91,8 +87,10 @@ async function showHeader() {
     tdElem.className = 'fc-timegrid-axis-top';
     trElem.append(tdElem);
     let color = true;
-    let test2 = test.filter((ressource) => ressource.niveau === i);
-    await test2.forEach((ressource) => {
+    let niveauRessource = ressourcesStore.getRessources.filter(
+      (ressource) => ressource.niveau === i
+    );
+    await niveauRessource.forEach((ressource) => {
       let colspan = ressource.colspan;
       if (colspan > 0) {
         let tmpTd = document.createElement('td');
