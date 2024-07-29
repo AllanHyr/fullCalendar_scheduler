@@ -32,11 +32,9 @@ const openForm = ref(false);
 
 // Correction de la logique de filtrage
 const allResources = computed(() => {
-  return sallePieceStore.fksalle === null
-    ? sallePieceStore.pieces
-    : sallePieceStore.pieces.filter(
-        (piece) => piece.groupId === sallePieceStore.fksalle
-      );
+  return test.filter(
+    (ressource) => ressource.niveau === ressourcesStore.nbRessources
+  );
 });
 
 const paginatedResources = computed(() => {
@@ -80,79 +78,33 @@ async function fetchEvents(start: string, end: string) {
   }
 }
 
-async function showSalleHeader() {
-  // affichage des salles
-  let header = $('.q-page-container .fc-col-header').find('thead');
-  let trElem = document.createElement('tr');
-  let oldTr = document.getElementsByClassName('liste_salle_thead');
-  if (oldTr.length > 0) {
-    oldTr[0].remove();
-  }
-  trElem.className = 'liste_salle_thead';
-  let resources = allResources.value;
-  let tdElem = document.createElement('td');
-  let tableGroupID = [];
-  for (let i = 0; i < resources.length; i++) {
-    if (!tableGroupID[resources[i].groupId]) {
-      tableGroupID[resources[i].groupId] = 0;
+async function showHeader() {
+  for (let i = ressourcesStore.nbRessources - 1; i > 0; i--) {
+    let header = $('.q-page-container .fc-col-header').find('thead');
+    let trElem = document.createElement('tr');
+    let oldTr = document.getElementsByClassName('liste_' + i + '_thead');
+    if (oldTr.length > 0) {
+      oldTr[0].remove();
     }
-    tableGroupID[resources[i].groupId]++;
-  }
-  tdElem.className = 'fc-timegrid-axis-top';
-  trElem.append(tdElem);
-  let color = true;
-  await sallePieceStore.salles.forEach((salle) => {
-    let colspan = tableGroupID[salle.id];
-    if (colspan > 0) {
-      let tmpTd = document.createElement('td');
-      tmpTd.setAttribute('colspan', colspan);
-      tmpTd.className = 'color_salle_header' + (color ? '_odd' : '_even');
-      tmpTd.append(salle.title);
-      trElem.append(tmpTd);
-    }
-    color = !color;
-  });
-  header.prepend(trElem);
-}
-
-async function showBatimentHeader() {
-  // affichage des salles
-  let header = $('.q-page-container .fc-col-header').find('thead');
-  let trElem = document.createElement('tr');
-  let oldTr = document.getElementsByClassName('liste_batiment_thead');
-  if (oldTr.length > 0) {
-    oldTr[0].remove();
-  }
-  trElem.className = 'liste_batiment_thead';
-  let resources = allResources.value;
-  let tdElem = document.createElement('td');
-  let tableGroupID: number[] = [];
-  for (let i = 0; i < resources.length; i++) {
-    if (!tableGroupID[resources[i].groupId]) {
-      tableGroupID[resources[i].groupId] = 0;
-    }
-    tableGroupID[resources[i].groupId]++;
-  }
-  tdElem.className = 'fc-timegrid-axis-top';
-  trElem.append(tdElem);
-  let color = true;
-  await sallePieceStore.batiments.forEach((batiment) => {
-    let colspan = 0;
-    sallePieceStore.salles.forEach((salle) => {
-      if (salle.groupId === batiment.id) {
-        colspan += tableGroupID[salle.id];
+    trElem.className = 'liste_batiment_thead';
+    let tdElem = document.createElement('td');
+    tdElem.className = 'fc-timegrid-axis-top';
+    trElem.append(tdElem);
+    let color = true;
+    let test2 = test.filter((ressource) => ressource.niveau === i);
+    await test2.forEach((ressource) => {
+      let colspan = ressource.colspan;
+      if (colspan > 0) {
+        let tmpTd = document.createElement('td');
+        tmpTd.setAttribute('colspan', colspan);
+        tmpTd.className = 'color_salle_header' + (color ? '_odd' : '_even');
+        tmpTd.append(ressource.title);
+        trElem.append(tmpTd);
       }
+      color = !color;
     });
-    if (colspan > 0) {
-      let tmpTd = document.createElement('td');
-      tmpTd.setAttribute('colspan', colspan);
-      tmpTd.className = 'color_batiment_header' + (color ? '_odd' : '_even');
-      tmpTd.append(batiment.title);
-      trElem.append(tmpTd);
-    }
-    color = !color;
-  });
-  header.prepend(trElem);
+    header.prepend(trElem);
+  }
 }
 
 async function handleDatesSet(info: { startStr: string; endStr: string }) {
@@ -179,20 +131,17 @@ const changeForm = async () => {
 };
 
 onMounted(() => {
-  showSalleHeader();
-  showBatimentHeader();
+  showHeader();
 });
 
 watch(allResources, () => {
   calendarOptions.resources = paginatedResources.value;
-  showSalleHeader();
-  showBatimentHeader();
+  showHeader();
 });
 </script>
 
 <template>
   <div>
-    {{ test }}
     <div class="pagination-controls">
       <q-btn @click="prevResources" :disable="currentIndex === 0"
         >Previous</q-btn

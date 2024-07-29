@@ -23,6 +23,7 @@ export const useRessourceStore = defineStore('ressource', {
           }
         });
         arrayColspan.push({
+          id: ressource.id,
           niveau: keySplit.length,
           title: ressource.title,
           key: ressource.key,
