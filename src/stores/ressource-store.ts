@@ -4,7 +4,7 @@ import { Ressources } from 'src/components/models';
 export const useRessourceStore = defineStore('ressource', {
   state: () => ({
     ressources: [],
-    nbRessources: 3,
+    nbRessources: null,
   }),
   getters: {
     getRessources() {
@@ -34,8 +34,9 @@ export const useRessourceStore = defineStore('ressource', {
     },
   },
   actions: {
-    setRessources(items: Ressources[]) {
+    setRessources(items: Ressources[], nbRessource: number) {
       this.ressources = items;
+      this.nbRessources = nbRessource;
     },
   },
 });

@@ -13,12 +13,13 @@ const ressource = ref(null);
 async function getRessource() {
   await api.get('/pieceSalle').then((response) => {
     let data = response.data;
+    let nbRessource = data.nbRessource;
     let niveau: string | number = '0';
     let array: Ressources[] = [];
 
-    hydrate(data);
+    hydrate(data.batiments);
 
-    function hydrate(level) {
+    function hydrate(level: Ressources[]) {
       for (let i = 0; i < level.length; i++) {
         let niveauArray = niveau.split('-');
         niveauArray[niveauArray.length - 1] = i;
@@ -40,7 +41,7 @@ async function getRessource() {
         niveau = niveauArray.join('-');
       }
     }
-    ressourceStore.setRessources(array);
+    ressourceStore.setRessources(array, nbRessource);
   });
 }
 
@@ -84,10 +85,10 @@ function optionsRessources() {
       label: 'Toutes les infrastructures',
       id: null,
     });
-    sallePieceStore.salles.forEach((salle) => {
+    ressourceStore.ressources.forEach((ressource) => {
       options.push({
-        label: salle.title,
-        id: salle.id,
+        label: ressource.title,
+        id: ressource.id,
       });
     });
   }
@@ -125,6 +126,8 @@ onMounted(async () => {
             style="width: 100%; margin-right: auto; margin-left: auto"
             class="print-hide bg-white rounded-borders q-px-sm"
             v-model="ressource"
+            option-label="label"
+            option-value="id"
             @update:model-value="changeValue()"
             :options="optionsRessources()"
           >

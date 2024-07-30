@@ -43,4 +43,5 @@ export interface Ressources {
   id: number;
   title: string;
   key: string | number;
+  children?: Ressources[];
 }
