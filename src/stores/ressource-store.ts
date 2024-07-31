@@ -4,15 +4,22 @@ import { Ressources } from 'src/components/models';
 export const useRessourceStore = defineStore('ressource', {
   state: () => ({
     ressources: [],
-    nbRessources: null,
+    nbRessources: 0,
+    roomSelected: null,
   }),
   getters: {
     getRessources() {
       const arrayColspan = [];
 
-      const array = this.ressources.filter((ressource) => {
+      let array = this.ressources.filter((ressource) => {
         return ressource.key.split('-').length === this.nbRessources;
       });
+
+      if (this.roomSelected !== null) {
+        array = array.filter((ressource) =>
+          ressource.key.startsWith(this.roomSelected)
+        );
+      }
 
       this.ressources.forEach((ressource) => {
         const keySplit = ressource.key.split('-');
@@ -37,6 +44,9 @@ export const useRessourceStore = defineStore('ressource', {
     setRessources(items: Ressources[], nbRessource: number) {
       this.ressources = items;
       this.nbRessources = nbRessource;
+    },
+    setSelectedRessource(roomSelected: string) {
+      this.roomSelected = roomSelected;
     },
   },
 });

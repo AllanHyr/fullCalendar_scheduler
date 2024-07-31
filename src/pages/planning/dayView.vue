@@ -26,11 +26,18 @@ const endDate = ref('');
 const resourceId = ref<number | null>(null);
 const openForm = ref(false);
 
-// Correction de la logique de filtrage
 const allResources = computed(() => {
-  return ressourcesStore.getRessources.filter(
+  let resources = ressourcesStore.getRessources.filter(
     (ressource) => ressource.niveau === ressourcesStore.nbRessources
   );
+
+  if (ressourcesStore.roomSelected !== null) {
+    resources = resources.filter((ressource) =>
+      ressource.key.startsWith(ressourcesStore.roomSelected)
+    );
+  }
+
+  return resources;
 });
 
 const paginatedResources = computed(() => {
@@ -75,14 +82,18 @@ async function fetchEvents(start: string, end: string) {
 }
 
 async function showHeader() {
-  for (let i = ressourcesStore.nbRessources - 1; i > 0; i--) {
+  let maxRessource = 0;
+  if (ressourcesStore.roomSelected !== null) {
+    maxRessource = ressourcesStore.roomSelected.split('-').length - 1;
+  }
+  for (let i = ressourcesStore.nbRessources - 1; i > maxRessource; i--) {
     let header = $('.q-page-container .fc-col-header').find('thead');
     let trElem = document.createElement('tr');
     let oldTr = document.getElementsByClassName('liste_' + i + '_thead');
     if (oldTr.length > 0) {
       oldTr[0].remove();
     }
-    trElem.className = 'liste_batiment_thead';
+    trElem.className = 'liste_' + i + '_thead';
     let tdElem = document.createElement('td');
     tdElem.className = 'fc-timegrid-axis-top';
     trElem.append(tdElem);
@@ -127,10 +138,6 @@ const changeForm = async () => {
   openForm.value = !openForm.value;
   await fetchEvents(startDateDay.value, endDateDay.value);
 };
-
-onMounted(() => {
-  showHeader();
-});
 
 watch(allResources, () => {
   calendarOptions.resources = paginatedResources.value;

@@ -2,13 +2,11 @@
 import { onMounted, reactive, ref } from 'vue';
 import { Link, Ressources } from 'components/models';
 import { api } from 'boot/axios';
-import { useSallePieceStore } from 'stores/sallePiece-store';
 import { useRessourceStore } from 'stores/ressource-store';
 
-const sallePieceStore = useSallePieceStore();
 const ressourceStore = useRessourceStore();
 
-const ressource = ref(null);
+const ressource = ref();
 
 async function getRessource() {
   await api.get('/pieceSalle').then((response) => {
@@ -88,7 +86,7 @@ function optionsRessources() {
     ressourceStore.ressources.forEach((ressource) => {
       options.push({
         label: ressource.title,
-        id: ressource.id,
+        id: ressource.key,
       });
     });
   }
@@ -96,7 +94,7 @@ function optionsRessources() {
 }
 
 function changeValue() {
-  sallePieceStore.setSalle(ressource.value.id);
+  ressourceStore.setSelectedRessource(ressource.value.id);
 }
 
 onMounted(async () => {
@@ -126,6 +124,7 @@ onMounted(async () => {
             style="width: 100%; margin-right: auto; margin-left: auto"
             class="print-hide bg-white rounded-borders q-px-sm"
             v-model="ressource"
+            label="Séléctionner une ressource"
             option-label="label"
             option-value="id"
             @update:model-value="changeValue()"
