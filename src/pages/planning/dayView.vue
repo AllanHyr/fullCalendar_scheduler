@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, watch } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
 import { api } from 'boot/axios';
 import FullCalendar from '@fullcalendar/vue3';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
@@ -86,13 +86,15 @@ async function showHeader() {
   if (ressourcesStore.roomSelected !== null) {
     maxRessource = ressourcesStore.roomSelected.split('-').length - 1;
   }
-  for (let i = ressourcesStore.nbRessources - 1; i > maxRessource; i--) {
-    let header = $('.q-page-container .fc-col-header').find('thead');
-    let trElem = document.createElement('tr');
+  for (let i = ressourcesStore.nbRessources - 1; i > 0; i--) {
     let oldTr = document.getElementsByClassName('liste_' + i + '_thead');
     if (oldTr.length > 0) {
       oldTr[0].remove();
     }
+  }
+  for (let i = ressourcesStore.nbRessources - 1; i > maxRessource; i--) {
+    let header = $('.q-page-container .fc-col-header').find('thead');
+    let trElem = document.createElement('tr');
     trElem.className = 'liste_' + i + '_thead';
     let tdElem = document.createElement('td');
     tdElem.className = 'fc-timegrid-axis-top';
