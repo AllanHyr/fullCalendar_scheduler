@@ -74,6 +74,12 @@ const linksTypeAgenda = reactive<Link[]>([
     icon: 'calendar_view_day',
     link: '/weekTimeline',
   },
+  {
+    title: 'Planning 31+',
+    caption: 'Planning mois ligne',
+    icon: 'date_range',
+    link: '/moreMonth',
+  },
 ]);
 
 function optionsRessources() {

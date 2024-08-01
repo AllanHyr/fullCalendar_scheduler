@@ -26,8 +26,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/planning/weekTimelineView.vue'),
       },
       {
-        path: 'test',
-        component: () => import('src/components/formEvent.vue'),
+        path: 'moreMonth',
+        component: () => import('src/pages/planning/mouthMoreView.vue'),
       },
     ],
   },
