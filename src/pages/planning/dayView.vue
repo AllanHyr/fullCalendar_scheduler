@@ -6,7 +6,6 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import formEvent from 'src/components/formEvent.vue';
-import $ from 'jquery';
 import { useRessourceStore } from 'stores/ressource-store';
 
 // Store
@@ -93,7 +92,10 @@ async function showHeader() {
     }
   }
   for (let i = ressourcesStore.nbRessources - 1; i > maxRessource; i--) {
-    let header = $('.q-page-container .fc-col-header').find('thead');
+    let header = document.querySelector('.q-page-container .fc-col-header');
+    if (header) {
+      header = header.querySelector('thead');
+    }
     let trElem = document.createElement('tr');
     trElem.className = 'liste_' + i + '_thead';
     let tdElem = document.createElement('td');
