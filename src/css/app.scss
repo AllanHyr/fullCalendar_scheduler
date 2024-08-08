@@ -1,1 +1,8 @@
 // app global css in SCSS form
+:root {
+  --border-default: 1px solid grey;
+}
+
+.borderPlanningCustom {
+  border: var(--border-default);
+}

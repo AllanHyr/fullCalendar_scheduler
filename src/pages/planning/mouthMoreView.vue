@@ -109,11 +109,11 @@ onMounted(() => {
                   <div>
                     {{
                       event.start.hours() +
-                      ' : ' +
+                      ':' +
                       event.start.minutes() +
                       ' à ' +
                       event.end.hours() +
-                      ' : ' +
+                      ':' +
                       event.end.minutes()
                     }}
                   </div>

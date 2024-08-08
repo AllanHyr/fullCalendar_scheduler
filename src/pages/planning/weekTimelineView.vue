@@ -6,9 +6,9 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 
 const calendarOptions = reactive({
   plugins: [resourceTimelinePlugin],
-  initialView: 'resourceTimeline',
-  datesSet: handleDatesSet,
+  initialView: 'resourceTimelineDay', // Vue quotidienne
   locale: 'fr',
+  datesSet: handleDatesSet,
   events: [],
   resourceGroupField: 'building',
   resources: [],
@@ -19,21 +19,14 @@ async function fetchResources() {
     const response = await api.get('/ressources');
     calendarOptions.resources = response.data;
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching resources:', error);
   }
 }
 
 async function fetchEventsWeek(startDate: string) {
-  var start = new Date(startDate);
-  var end = new Date(start);
-  end.setDate(end.getDate() + 7);
-
-  var startStr = start.toISOString();
-  var endStr = end.toISOString();
-
   try {
     const response = await api.get('/eventsWeek', {
-      params: { startStr, endStr },
+      params: { startDate },
     });
     calendarOptions.events = response.data;
   } catch (error) {
